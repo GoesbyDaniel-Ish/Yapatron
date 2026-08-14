@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>C++ WebAssembly Demo</title>
+</head>
+<body>
 
+  <h2>C++ Powered Math in the Browser</h2>
+  
+  <p>5 + 7 = <strong id="sum-result">Calculating...</strong></p>
+  <p>5 × 7 = <strong id="product-result">Calculating...</strong></p>
+
+  <script src="math.js"></script>
+
+  <script>
+    // Emscripten fires 'onRuntimeInitialized' once the C++ WebAssembly module is loaded
+    Module.onRuntimeInitialized = () => {
+      
+      // 1. Wrap the C++ functions so JavaScript can call them normally
+      const add = Module.cwrap('addNumbers', 'number', ['number', 'number']);
+      const multiply = Module.cwrap('multiplyNumbers', 'number', ['number', 'number']);
+
+      // 2. Execute the C++ functions!
+      const sum = add(5, 7);
+      const product = multiply(5, 7);
+
+      // 3. Display the results on the web page
+      document.getElementById('sum-result').textContent = sum;
+      document.getElementById('product-result').textContent = product;
+    };
+  </script>
+
+</body>
+</html>
